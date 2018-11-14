@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using DeepTracker.Extensions;
 
 namespace DeepTracker.DynamicSubscription
 {
@@ -9,6 +12,7 @@ namespace DeepTracker.DynamicSubscription
     {
         private readonly Action<TObject, THandler> _subscribeAction;
         private readonly ConditionalWeakTable<TObject, THandler> _table;
+        private readonly Dictionary<int, WeakReference> _targetsRegistry;
         private readonly Action<TObject, THandler> _unsubscribeAction;
 
         #region Constructors
@@ -18,6 +22,7 @@ namespace DeepTracker.DynamicSubscription
             _subscribeAction = subscribeAction ?? throw new ArgumentNullException("subscribeAction");
             _unsubscribeAction = unsubscribeAction ?? throw new ArgumentNullException("unsubscribeAction");
             _table = new ConditionalWeakTable<TObject, THandler>();
+            _targetsRegistry = new Dictionary<int, WeakReference>();
         }
 
         #endregion
@@ -32,7 +37,7 @@ namespace DeepTracker.DynamicSubscription
 
             _subscribeAction(targetRef, handler);
             _table.Add(targetRef, handler);
-
+            _targetsRegistry.Add(targetRef.GetHash(), new WeakReference(targetRef));
             return true;
         }
 
@@ -42,10 +47,22 @@ namespace DeepTracker.DynamicSubscription
             {
                 _unsubscribeAction(targetRef, existingHandler);
                 _table.Remove(targetRef);
+                _targetsRegistry.Remove(targetRef.GetHash());
                 return true;
             }
 
             return false;
+        }
+
+        public void UnsubscribeAll()
+        {
+            var targets = _targetsRegistry.Select(r => r.Value.Target).Where(t => t != null).ToList();
+            foreach (var target in targets)
+            {
+                Unsubscribe(target);
+            }
+
+            _targetsRegistry.Clear();
         }
 
         #endregion

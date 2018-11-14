@@ -34,8 +34,10 @@ namespace DeepTracker.ComponentModel
             _source = weakSource ? new WeakReference(source) : source;
             _descriptor = weakDescriptor ? (object)new WeakReference(descriptor) : descriptor;
 
-            _hashCode = source.GetHash().MergeHash(descriptor.GetHash());
+            _hashCode = source.GetHash().MergeHash(descriptor.Name.GetHash());
 
+            Name = descriptor.Name;
+            Type = descriptor.PropertyType;
             IsReadOnly = descriptor.IsReadOnly;
             SupportsChangeEvents = descriptor.SupportsChangeEvents;
         }
@@ -45,7 +47,9 @@ namespace DeepTracker.ComponentModel
         #region Properties
 
         public bool IsReadOnly { get; }
+        public string Name { get; }
         public bool SupportsChangeEvents { get; }
+        public Type Type { get; }
 
         #endregion
 
@@ -67,6 +71,18 @@ namespace DeepTracker.ComponentModel
         #endregion
 
         #region Members
+
+        public object GetSource()
+        {
+            var source = _source;
+
+            if (_source is WeakReference weakSource)
+            {
+                source = weakSource.Target;
+            }
+
+            return source;
+        }
 
         public bool TryAddValueChanged(EventHandler handler)
         {

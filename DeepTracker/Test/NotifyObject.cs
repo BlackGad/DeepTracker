@@ -1,11 +1,15 @@
-﻿using DeepTracker.Extensions;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using DeepTracker.Extensions;
 
 namespace DeepTracker.Test
 {
-    internal class NotifyObject : NotifyBase
+    internal class NotifyObject : INotifyPropertyChanged
     {
         private NotifyObject _child;
-        private string _stringValue;
+        private Simple _stringValue;
+
+        #region Properties
 
         public NotifyObject Child
         {
@@ -18,7 +22,7 @@ namespace DeepTracker.Test
             }
         }
 
-        public string StringValue
+        public Simple StringValue
         {
             get { return _stringValue; }
             set
@@ -28,5 +32,22 @@ namespace DeepTracker.Test
                 OnPropertyChanged();
             }
         }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        #region Members
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 }

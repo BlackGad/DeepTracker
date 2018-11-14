@@ -1,12 +1,15 @@
 ﻿using System;
+using DeepTracker.ComponentModel.Navigation;
 
 namespace DeepTracker.ComponentModel.DeepTracker
 {
     public interface ITrackRouteConfiguration
     {
-        ITrackRouteConfiguration Close();
-        ITrackRouteConfiguration Depth(uint? depth);
+        #region Members
+
         ITrackRouteConfiguration Except(Type type, string propertyName);
-        ITrackRouteConfiguration Except(params string[] route);
+        ITrackRouteConfiguration Except(Route route);
+
+        #endregion
     }
 }

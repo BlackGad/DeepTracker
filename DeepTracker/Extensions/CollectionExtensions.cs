@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DeepTracker.Extensions
 {
@@ -18,18 +17,23 @@ namespace DeepTracker.Extensions
             return result;
         }
 
-        public static T GetOrAdd<T>(this ICollection<T> collection, Func<T, bool> predicate, Func<T> addFactory = null)
+        /// <summary>
+        ///     Enumerates several IEnumerable instances as one.
+        /// </summary>
+        /// <param name="enumerable">Source object.</param>
+        /// <param name="unitedItems">United item instances.</param>
+        /// <returns>Enumerable union/</returns>
+        public static IEnumerable<T> UnionWith<T>(this IEnumerable<T> enumerable, params T[] unitedItems)
         {
-            if (collection == null) throw new ArgumentNullException(nameof(collection));
-            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+            foreach (var item in enumerable)
+            {
+                yield return item;
+            }
 
-            var selected = collection.Where(predicate).ToList();
-            if (selected.Any()) return selected.First();
-
-            addFactory = addFactory ?? Activator.CreateInstance<T>;
-            var item = addFactory();
-            collection.Add(item);
-            return item;
+            foreach (var item in unitedItems)
+            {
+                yield return item;
+            }
         }
 
         #endregion
