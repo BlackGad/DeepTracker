@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DeepTracker.Extensions
+namespace DeepTracker1.Extensions
 {
     public static class CollectionExtensions
     {

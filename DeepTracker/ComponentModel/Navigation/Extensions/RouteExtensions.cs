@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
-using DeepTracker.Extensions;
+using DeepTracker1.Extensions;
 
-namespace DeepTracker.ComponentModel.Navigation.Extensions
+namespace DeepTracker1.ComponentModel.Navigation.Extensions
 {
     public static class RouteExtensions
     {
@@ -93,7 +93,7 @@ namespace DeepTracker.ComponentModel.Navigation.Extensions
             take = take ?? source.Count - skip;
             return Route.Create(source.Skip(skip).Take(take.Value));
         }
-
+        
         #endregion
     }
 }

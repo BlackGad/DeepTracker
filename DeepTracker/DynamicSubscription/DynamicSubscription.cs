@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using DeepTracker.Extensions;
+using DeepTracker1.Extensions;
 
-namespace DeepTracker.DynamicSubscription
+namespace DeepTracker1.DynamicSubscription
 {
     public class DynamicSubscription<TObject, THandler>
         where TObject : class

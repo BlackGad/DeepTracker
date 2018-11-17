@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DeepTracker.Data
+namespace DeepTracker1.Data
 {
     public class ObjectsStorage<TKey, TObject> : IEnumerable<KeyValuePair<TKey, TObject>>
     {

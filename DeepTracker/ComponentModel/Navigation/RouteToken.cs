@@ -1,4 +1,4 @@
-namespace DeepTracker.ComponentModel.Navigation
+namespace DeepTracker1.ComponentModel.Navigation
 {
     internal class RouteToken
     {

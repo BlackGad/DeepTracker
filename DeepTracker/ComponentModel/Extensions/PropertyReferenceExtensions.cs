@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using DeepTracker.Data;
-using DeepTracker.Extensions;
+using DeepTracker1.Data;
+using DeepTracker1.Extensions;
 
-namespace DeepTracker.ComponentModel.Extensions
+namespace DeepTracker1.ComponentModel.Extensions
 {
     public static class PropertyReferenceExtensions
     {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DeepTracker.ComponentModel.Navigation
+namespace DeepTracker1.ComponentModel.Navigation
 {
     internal class RouteTokenSequence : IReadOnlyList<RouteToken>,
                                         IFormattable

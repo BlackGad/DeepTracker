@@ -7,9 +7,9 @@ using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using DeepTracker.Extensions;
+using DeepTracker1.Extensions;
 
-namespace DeepTracker.ComponentModel.Navigation
+namespace DeepTracker1.ComponentModel.Navigation
 {
     [Serializable]
     public class Route : IFormattable,

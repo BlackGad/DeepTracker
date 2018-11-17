@@ -1,8 +1,12 @@
 ﻿using System;
-using DeepTracker.ComponentModel.Navigation;
-using DeepTracker.Test;
+using System.Linq;
+using System.Reflection;
+using DeepTracker1.ComponentModel;
+using DeepTracker1.ComponentModel.Navigation;
+using DeepTracker1.Extensions;
+using DeepTracker1.Test;
 
-namespace DeepTracker
+namespace DeepTracker1
 {
     class Program
     {
@@ -10,17 +14,17 @@ namespace DeepTracker
 
         static void Main(string[] args)
         {
-            var tracker = new ComponentModel.DeepTracker.DeepTracker();
             var test = new MyClass();
 
-            Console.WriteLine("Initial");
-            Console.ReadLine();
-            for (int i = 0; i < 10000; i++)
+            Console.WriteLine("Initialization...");
+            //Console.ReadLine();
+
+            //for (int i = 0; i < 100; i++)
             {
-                test.Test(tracker);
+                test.Test();
             }
 
-            Console.WriteLine("after scope lose");
+            Console.WriteLine("Finished");
             Console.ReadLine();
         }
 
@@ -32,27 +36,58 @@ namespace DeepTracker
         {
             #region Members
 
-            public void Test(ComponentModel.DeepTracker.DeepTracker tracker)
+            public void Test()
             {
-                var root = new DependencyObject1
+                var root = new TestObject("Root");
+
+                using (var tracker = DeepTracker.Setup(root, Routes.WildcardRecursive)
+                                                .Except(Routes.WildcardRecursive, "Child")
+                                                .Create())
                 {
-                    Child = new DependencyObject1()
-                };
+                    tracker.ObjectPropertyChanged += (sender, args) =>
+                    {
+                        var message = $"PROPERTY '{args.Route}' changed: {args.OldValue ?? "<null>"} -> {args.NewValue ?? "<null>"}";
+                        Console.WriteLine(message);
+                    };
+                    tracker.CollectionChanged += (sender, args) =>
+                    {
+                        var message = $"COLLECTION '{args.Route}' changed ({args.EventArgs.Action}): ";
 
-                root.Child.Child = root;
+                        var oldItems = args.EventArgs.OldItems.Enumerate().ToArray();
+                        if (oldItems.Any()) message += $"Removed ({string.Join(", ", oldItems)}) ";
 
-                tracker.ObjectPropertyChanged += (sender, eventArgs) => { };
+                        var newItems = args.EventArgs.NewItems.Enumerate().ToArray();
+                        if (newItems.Any()) message += $"Added ({string.Join(", ", newItems)})";
 
-                tracker.Track(root, Route.Create(Route.WildcardRecursive));
+                        Console.WriteLine(message);
+                    };
 
-                tracker.Activate();
+                    tracker.Activate();
+                    root.Child = new TestObject("Root_Initial_Child");
+                    root.PropertyName = "asdasd";
 
-                root.StringValue = new Simple();
-                root.Child = new DependencyObject1();
-                root.Child.StringValue = new Simple();
+                    root.Children = new TestCollection();
+                    root.Children.Child = new TestObject("ddd");
+                    root.Children = null;
+                    root.Children = new TestCollection
+                    {
+                        new TestObject("Root_Initial_Collection_Child")
+                    };
 
-                tracker.Deactivate();
-                tracker.Untrack(root, Route.Create(Route.WildcardRecursive));
+                    root.Children.Child = new TestObject("Collection_Child");
+
+                    var rootRuntimeCollectionChild = new TestObject("Root_Runtime_Collection_Child");
+                    root.Children.Add(rootRuntimeCollectionChild);
+                    root.Children.Remove(rootRuntimeCollectionChild);
+
+                    root.Child.Child = new TestObject("Root_Runtime_Child");
+                    root.Child.Children = new TestCollection();
+
+                    var childRuntimeCollectionChild = new TestObject("Child_Runtime_Collection_Child");
+                    root.Child.Children.Add(childRuntimeCollectionChild);
+
+                    childRuntimeCollectionChild.Child = new TestObject("Child_Runtime_Collection_Child_Child");
+                }
             }
 
             #endregion

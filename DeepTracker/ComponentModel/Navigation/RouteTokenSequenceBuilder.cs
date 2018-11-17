@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DeepTracker.Extensions;
+using DeepTracker1.Extensions;
 
-namespace DeepTracker.ComponentModel.Navigation
+namespace DeepTracker1.ComponentModel.Navigation
 {
     internal class RouteTokenSequenceBuilder
     {
@@ -70,8 +70,8 @@ namespace DeepTracker.ComponentModel.Navigation
             var regexPattern = string.Join("/", _regexPatternTokens.Select(t => t.Item1));
             foreach (var tokenWithOutSlot in _regexPatternTokens.Where(t => t.Item2).Select(t => t.Item1))
             {
-                regexPattern = regexPattern.Replace(tokenWithOutSlot + "/", tokenWithOutSlot);
-                regexPattern = regexPattern.Replace("/" + tokenWithOutSlot, tokenWithOutSlot);
+                regexPattern = regexPattern.Replace(tokenWithOutSlot + "/", tokenWithOutSlot + "/?");
+                regexPattern = regexPattern.Replace("/" + tokenWithOutSlot, "/?" + tokenWithOutSlot);
             }
 
             return new RouteTokenSequence(_records,

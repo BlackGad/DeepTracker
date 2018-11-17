@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeepTracker.ComponentModel.Navigation
+namespace DeepTracker1.ComponentModel.Navigation
 {
     public class RouteRecursiveSplit
     {

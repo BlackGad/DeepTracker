@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DeepTracker.Extensions
+namespace DeepTracker1.Extensions
 {
     public static class ObjectExtensions
     {

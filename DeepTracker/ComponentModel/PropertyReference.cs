@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using DeepTracker.Extensions;
+using DeepTracker1.Extensions;
 
-namespace DeepTracker.ComponentModel
+namespace DeepTracker1.ComponentModel
 {
     public class PropertyReference
     {
@@ -37,9 +37,10 @@ namespace DeepTracker.ComponentModel
             _hashCode = source.GetHash().MergeHash(descriptor.Name.GetHash());
 
             Name = descriptor.Name;
-            Type = descriptor.PropertyType;
+            PropertyType = descriptor.PropertyType;
             IsReadOnly = descriptor.IsReadOnly;
             SupportsChangeEvents = descriptor.SupportsChangeEvents;
+            SourceType = source.GetType();
         }
 
         #endregion
@@ -48,8 +49,9 @@ namespace DeepTracker.ComponentModel
 
         public bool IsReadOnly { get; }
         public string Name { get; }
+        public Type PropertyType { get; }
+        public Type SourceType { get; }
         public bool SupportsChangeEvents { get; }
-        public Type Type { get; }
 
         #endregion
 

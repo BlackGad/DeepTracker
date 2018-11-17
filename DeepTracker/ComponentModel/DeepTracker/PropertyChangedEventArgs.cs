@@ -1,15 +1,16 @@
 ﻿using System;
+using DeepTracker1.ComponentModel.Navigation;
 
-namespace DeepTracker.ComponentModel.DeepTracker
+namespace DeepTracker1.ComponentModel
 {
     public class PropertyChangedEventArgs : EventArgs
     {
         #region Constructors
 
-        public PropertyChangedEventArgs(object source, string property, object oldValue, object newValue)
+        public PropertyChangedEventArgs(Route route, PropertyReference propertyReference, object oldValue, object newValue)
         {
-            PropertyName = property ?? throw new ArgumentNullException(nameof(property));
-            Source = source ?? throw new ArgumentNullException(nameof(source));
+            Route = route ?? throw new ArgumentNullException(nameof(route));
+            PropertyReference = propertyReference ?? throw new ArgumentNullException(nameof(propertyReference));
             OldValue = oldValue;
             NewValue = newValue;
         }
@@ -20,8 +21,8 @@ namespace DeepTracker.ComponentModel.DeepTracker
 
         public object NewValue { get; }
         public object OldValue { get; }
-        public string PropertyName { get; }
-        public object Source { get; }
+        public PropertyReference PropertyReference { get; }
+        public Route Route { get; }
 
         #endregion
     }
